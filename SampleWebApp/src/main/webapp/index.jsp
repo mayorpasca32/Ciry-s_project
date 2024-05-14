@@ -3,18 +3,18 @@
     <title> New java Musical project for the year 2024 </title>
   </head>
   <body bgcolor="#00FF00">
-    <h1>Hello from RealCloud DevOps Expert Consults </h1>
+    <h1>Hello from Genomics DevOps Expert Consults </h1>
     <!--Form declaration. Must have an action attribute -->
         <form action="C:/JonnyJava/FirstJava.html/profile.html" method="post">
             <p>Let us learn something about your web music lifestyle. </p> <!--This control is for mutplie line comment-->
             <textarea name="comments" cols="30" rows="5"></textarea>
 
             <p>select your favourite genre of music <br /> <!--Radion control. only one selection possible-->
-                <input type ="radio" name="genre" value="rock" checked="checked"/>Rock <br />
-                <input type ="radio" name="genre" value="pop"/>Pop <br />
-                <input type ="radio" name="genre" value="raggae"/>Reggae <br />
-                <input type ="radio" name="genre" value="jazz"/>Jazz <br />
-                <input type ="radio" name="genre" value="Afro Beat"/>Afro Beat <br />
+                <input type ="radio" name="genre" value="Gosple" checked="checked"/>Gosple <br />
+                <input type ="radio" name="genre" value="Country"/>Country <br />
+                <input type ="radio" name="genre" value="Hymm"/>Hymm <br />
+                <input type ="radio" name="genre" value="Jimreevs"/>Jimreevs <br />
+                <input type ="radio" name="genre" value="Praise ana Worship"/>Praise ana Worship <br />
             </p>
 
             <p>select your favourite music service <br /> <!--Checkbox control-->
