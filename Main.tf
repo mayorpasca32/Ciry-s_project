@@ -1,70 +1,70 @@
 # configured aws provider with proper credentials
 provider "aws" {
   region     = var.region
-  profile    = "default"
+  profile    = "devops"
 }
 
 
 # Create a VPC
 
-resource "aws_vpc" "prodvpc" {
+resource "aws_vpc" "genomics_vpc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
   enable_dns_hostnames = true
 
   tags = {
-    Name = "production_vpc"
+    Name = "genomics_vpc"
   }
 }
 
 # Create a Subnet
 
-resource "aws_subnet" "prodsubnet1" {
-  vpc_id            = aws_vpc.prodvpc.id
+resource "aws_subnet" "genomics_subnet" {
+  vpc_id            = aws_vpc.genomics_vpc.id
   cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-2a"
+  availability_zone = "us-east-1a"
   map_public_ip_on_launch = true
   
   tags = {
-    Name = "prod-subnet"
+    Name = "genomics-subnet"
   }
 }
 
 #Create the Internet Gateway and attach it to the VPC
-resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.prodvpc.id
+resource "aws_internet_gateway" "genomics_igw" {
+  vpc_id = aws_vpc.genomics_vpc.id
 
   tags = {
-    Name = "New"
+    Name = "genomics_igw"
   }
 }
 
 # Create a Route Table
-resource "aws_route_table" "prodroute" {
-  vpc_id = aws_vpc.prodvpc.id
+resource "aws_route_table" "genomicsRT" {
+  vpc_id = aws_vpc.genomics_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
+    gateway_id = aws_internet_gateway.genomics_igw.id
   }
 
   tags = {
-    Name = "RT"
+    Name = "genomicsRT"
   }
 }
 
 
 #Associate the subnet with the Route Table
 resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.prodsubnet1.id
-  route_table_id = aws_route_table.prodroute.id
+  subnet_id      = aws_subnet.genomics_subnet.id
+  route_table_id = aws_route_table.genomicsRT.id
 }
 
 # Create a Security Group for the EC2 Instance
 resource "aws_security_group" "allow_web" {
   name        = "allow_web"
   description = "Allow webserver inbound traffic"
-  vpc_id      = aws_vpc.prodvpc.id
+  vpc_id      = aws_vpc.genomics_vpc.id
 
   ingress {
     description = "Web Traffic from VPC"
@@ -139,9 +139,9 @@ resource "aws_instance" "firstinstance" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.allow_web.id]
-  subnet_id              = aws_subnet.prodsubnet1.id
-  key_name               = "ohio-KP"
-  availability_zone      = "us-east-2a"
+  subnet_id              = aws_subnet.genomics_subnet.id
+  key_name               = "Genomics_key_pair"
+  availability_zone      = "us-east-1a"
   user_data              =  "${file("install_jenkins.sh")}"
 
 
@@ -155,9 +155,9 @@ resource "aws_instance" "secondinstance" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.allow_web.id]
-  subnet_id              = aws_subnet.prodsubnet1.id
-  key_name               = "ohio-KP"
-  availability_zone      = "us-east-2a"
+  subnet_id              = aws_subnet.genomics_subnet.id
+  key_name               = "Genomics_key_pair"
+  availability_zone      = "us-east-1a"
   user_data              =  "${file("install_tomcat.sh")}"
   
 
