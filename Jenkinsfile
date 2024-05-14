@@ -15,7 +15,7 @@ pipeline {
         
         stage('Deploy to Tomcat Web Server') {
             steps {
-                deploy adapters: [tomcat9(credentialsId: 'CI.jenkins', path: '', url: 'http://44.201.180.246:8080/')], contextPath: 'webapp', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'my_new_cicd', path: '', url: 'http://23.22.213.181:8080/')], contextPath: 'webapp', war: '**/*.war'
             }
         }
     }
